@@ -1,4 +1,5 @@
 const request = require("supertest");
+const mongoose = require("mongoose");
 const app = require("../server");
 
 let tokenAdmin;
@@ -37,10 +38,8 @@ describe("Productos - Roles", () => {
         descripcion: "Prueba producto",
         precio: 50,
         stock: 5,
-        categoria: "Comida"   // 👈 AQUÍ agregamos categoria
+        categoria: "Comida"
       });
-
-    console.log("Respuesta crear producto:", res.body);
 
     expect(res.statusCode).toBe(201);
     expect(res.body.nombre).toBe("Hamburguesa Test");
@@ -55,7 +54,7 @@ describe("Productos - Roles", () => {
         descripcion: "No permitido",
         precio: 20,
         stock: 2,
-        categoria: "Bebida"   // 👈 AQUÍ también
+        categoria: "Bebida"
       });
 
     expect(res.statusCode).toBe(403);
@@ -63,9 +62,6 @@ describe("Productos - Roles", () => {
 
 });
 
-const mongoose = require("mongoose");
-
 afterAll(async () => {
   await mongoose.connection.close();
 });
-

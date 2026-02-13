@@ -1,15 +1,18 @@
 const express = require("express");
-const app = express();
 require("dotenv").config();
 const mongoose = require("mongoose");
+
+const app = express();
 
 // Middleware
 app.use(express.json());
 
-// Conectar a MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB conectado"))
-  .catch(err => console.log(err));
+// Conectar a MongoDB solo si no está conectado
+if (mongoose.connection.readyState === 0) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB conectado"))
+    .catch(err => console.log(err));
+}
 
 // Rutas
 app.use("/api/auth", require("./routes/auth.routes"));
@@ -23,4 +26,3 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 module.exports = app;
-
